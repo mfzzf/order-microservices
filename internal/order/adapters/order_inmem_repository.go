@@ -14,6 +14,20 @@ type MemoryOrderRepository struct {
 	store []*domain.Order
 }
 
+var fakeData = []*domain.Order{}
+
+func NewMemoryOrderRepository() *MemoryOrderRepository {
+	s := make([]*domain.Order, 0)
+	s = append(s, &domain.Order{
+		ID:          "fake-ID",
+		CustomerID:  "fake-customer-id",
+		Status:      "fake-status",
+		PaymentLink: "fake-payment-link",
+		Items:       nil,
+	})
+	return &MemoryOrderRepository{store: s, lock: &sync.RWMutex{}}
+}
+
 func (m MemoryOrderRepository) Create(_ context.Context, order *domain.Order) (*domain.Order, error) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
@@ -71,8 +85,4 @@ func (m MemoryOrderRepository) Update(ctx context.Context, order *domain.Order, 
 	}
 
 	return nil
-}
-
-func NewMemoryOrderRepository() *MemoryOrderRepository {
-	return &MemoryOrderRepository{store: make([]*domain.Order, 0), lock: &sync.RWMutex{}}
 }

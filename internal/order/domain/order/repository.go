@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-type repository interface {
+type Repository interface {
 	Create(context.Context, *Order) (*Order, error)
 	Get(ctx context.Context, id, customerID string) (*Order, error)
 	Update(
